@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/AurlinD/tinyurl/issues"
   },
-  "homepage": "https://github.com/AurlinD/tinyurl#readme"
+  "homepage": "https://github.com/AurlinD/tinyurl#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
