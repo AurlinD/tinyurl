@@ -40,8 +40,8 @@ app.get("/urls/:shortURL", (req, res) => {
 app.post("/urls", (req, res) => {
   let short = generateRandomString();
   urlDatabase[short] = req.body.longURL;
-  console.log(urlDatabase);
-  //res.render(`/urls/${short}`);
+  res.redirect(`/urls/${short}`);
+
   // console.log(req.body); // Log the POST request body to the console
   // res.send("Ok"); // Respond with 'Ok' (we will replace this)
 });
