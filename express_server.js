@@ -61,6 +61,11 @@ app.post("/urls/:shortURL/update", (req, res) => {
   res.redirect("/urls");
 });
 
+app.post("/login", (req, res) => {
+  res.cookie("username", req.body.username);
+  res.redirect("/urls");
+});
+
 const generateRandomString = () => {
   return Math.random(36)
     .toString(36)
