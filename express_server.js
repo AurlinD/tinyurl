@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // set the view engine to ejs
@@ -21,7 +24,7 @@ app.get("/", (req, res) => {
 // });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
+  let templateVars = { urls: urlDatabase, username: req.cookies.username };
   res.render("urls_index", templateVars);
 });
 
