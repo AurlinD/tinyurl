@@ -93,6 +93,17 @@ app.post("/login", (req, res) => {
   res.redirect("/urls");
 });
 
+app.post("/register", (req, res) => {
+  let userID = generateRandomString();
+  users[userID] = {
+    id: userID,
+    email: req.body.email,
+    password: req.body.password
+  };
+  console.log(users);
+  res.redirect("/urls");
+});
+
 const generateRandomString = () => {
   return Math.random(36)
     .toString(36)
