@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const { urlDatabase, users } = require("./database");
 const {
   checkUserEmail,
   generateRandomString,
@@ -14,24 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // set the view engine to ejs
 app.set("view engine", "ejs");
-
-const urlDatabase = {
-  b2xVn2: "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
-};
-
-const users = {
-  userRandomID: {
-    id: "userRandomID",
-    email: "user@example.com",
-    password: "1"
-  },
-  user2RandomID: {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: "2"
-  }
-};
 
 app.get("/urls", (req, res) => {
   let templateVars = {
@@ -83,7 +66,11 @@ app.get("/login", (req, res) => {
 
 app.post("/urls", (req, res) => {
   let short = generateRandomString();
-  urlDatabase[short] = req.body.longURL;
+  urlDatabase[short] = {
+    longURL: req.body.longURL,
+    userID: req.cookies.userId
+  };
+  console.log(urlDatabase);
   res.redirect(`/urls/${short}`);
   // console.log(req.body); // Log the POST request body to the console
   // res.send("Ok"); // Respond with 'Ok' (we will replace this)
