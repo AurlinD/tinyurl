@@ -21,6 +21,7 @@ app.get("/urls", (req, res) => {
     urls: urlDatabase,
     user: users[req.cookies.userId]
   };
+  console.log(urlDatabase);
   res.render("urls_index", templateVars);
 });
 
@@ -83,7 +84,10 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 
 app.post("/urls/:shortURL/update", (req, res) => {
   delete urlDatabase[req.params.shortURL];
-  urlDatabase[req.params.shortURL] = req.body.longURL;
+  urlDatabase[req.params.shortURL] = {
+    longURL: req.body.longURL,
+    userID: req.cookies.userId
+  };
   res.redirect("/urls");
 });
 
