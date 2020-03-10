@@ -33,28 +33,24 @@ const users = {
   }
 };
 
-app.get("/", (req, res) => {
-  res.send("Hello!");
-});
-
-// app.get("/urls.json", (req, res) => {
-//   res.json(urlDatabase);
-// });
-
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlDatabase,
     user: users[req.cookies.userId]
   };
-  console.log(templateVars);
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
+  let userId = users[req.cookies.userId];
   let templateVars = {
-    user: users[req.cookies.userId]
+    user: userId
   };
-  res.render("urls_new", templateVars);
+  if (userId) {
+    res.render("urls_new", templateVars);
+  } else {
+    res.render("login", templateVars);
+  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
