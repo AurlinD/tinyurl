@@ -7,11 +7,14 @@ const { urlDatabase, users } = require("./database");
 const {
   checkUserEmail,
   generateRandomString,
-  checkUserPassword
+  checkUserPassword,
+  urlsForUser
 } = require("./helper");
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+console.log(urlsForUser("aJ48lW"));
 
 // set the view engine to ejs
 app.set("view engine", "ejs");
@@ -21,7 +24,7 @@ app.get("/urls", (req, res) => {
     urls: urlDatabase,
     user: users[req.cookies.userId]
   };
-  console.log(urlDatabase);
+
   res.render("urls_index", templateVars);
 });
 
@@ -71,7 +74,6 @@ app.post("/urls", (req, res) => {
     longURL: req.body.longURL,
     userID: req.cookies.userId
   };
-  console.log(urlDatabase);
   res.redirect(`/urls/${short}`);
   // console.log(req.body); // Log the POST request body to the console
   // res.send("Ok"); // Respond with 'Ok' (we will replace this)
@@ -136,7 +138,7 @@ app.post("/register", (req, res) => {
       email: req.body.email,
       password: req.body.password
     };
-    console.log(users);
+    //console.log(users);
     res.redirect("/urls");
   }
 });

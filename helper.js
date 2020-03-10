@@ -1,4 +1,4 @@
-const { users, urlDatabase } = require("./express_server.js");
+const { users, urlDatabase } = require("./database.js");
 
 const generateRandomString = () => {
   return Math.random(36)
@@ -26,4 +26,19 @@ const checkUserPassword = (usersDatabase, formPassword) => {
   return false;
 };
 
-module.exports = { generateRandomString, checkUserEmail, checkUserPassword };
+const urlsForUser = userID => {
+  let result = {};
+  for (let url in urlDatabase) {
+    if (urlDatabase[url].userID == userID) {
+      result[url] = urlDatabase[url];
+    }
+  }
+  return result;
+};
+
+module.exports = {
+  generateRandomString,
+  checkUserEmail,
+  checkUserPassword,
+  urlsForUser
+};
