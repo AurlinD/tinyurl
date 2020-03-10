@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const { checkUserEmail, generateRandomString } = require("./helper");
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -95,21 +96,28 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   let userID = generateRandomString();
-  users[userID] = {
-    id: userID,
-    email: req.body.email,
-    password: req.body.password
-  };
-  console.log(users);
-  res.cookie("user_id", userID);
-  res.redirect("/urls");
-});
+  if (req.body.email === "" || req.body.password === "") {
+    res.status(400);
+    res.send(
+      `${res.statusCode} Please make sure you enter a email and password`
+    );
+  } else if (checkUserEmail(users, req.body.email)) {
+    res.status(400);
+    res.send(
+      `${res.statusCode} Seems like you already have an account, please login!`
+    );
+  } else {
+    users[userID] = {
+      id: userID,
+      email: req.body.email,
+      password: req.body.password
+    };
+    console.log(users);
 
-const generateRandomString = () => {
-  return Math.random(36)
-    .toString(36)
-    .slice(2, 8);
-};
+    res.cookie("user_id", userID);
+    res.redirect("/urls");
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
