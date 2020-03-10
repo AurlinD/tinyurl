@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <% if (!username) { %>
+    <% if (!user) { %>
       <div class="navbar-nav" style="margin: 0.3em 0.6em">
         <form class="form-inline" action="/login" method="GET">
           <button type="submit" class="btn btn-outline-light">Sign In</button>
@@ -48,7 +48,7 @@
       <div>
         <form class="form-inline" action="/logout" method="POST">
           <span class="navbar-text" style="margin: 0.15em 0.4em;color: white;font-size: large;">Hey,
-            <%= username%></span>
+            <%= user.name%></span>
           <button type="submit" class="btn btn-outline-light" style="margin: 0.3em 0em 0.3em 0.6em">Sign Out</button>
           <% } %>
         </form>
