@@ -14,14 +14,13 @@ const {
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-console.log(urlsForUser("aJ48lW"));
-
 // set the view engine to ejs
 app.set("view engine", "ejs");
 
 app.get("/urls", (req, res) => {
+  let personalDB = urlsForUser(req.cookies.userId);
   let templateVars = {
-    urls: urlDatabase,
+    urls: personalDB,
     user: users[req.cookies.userId]
   };
 
@@ -46,6 +45,9 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
+  if (!req.cookies.userId) {
+    res.redirect("/login");
+  }
   let templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL].longURL,
