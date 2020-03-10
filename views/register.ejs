@@ -22,8 +22,19 @@
     <%- include('partials/_header') %>
     <main style="margin: 1em;">
       <div>
-        <h3 style="margin: 1em 0;">Log in to your account</h3>
-        <form method="POST" action="/login" style="width: 400px">
+        <h3 style="margin: 1em 0;">Register your new account</h3>
+        <form method="POST" action="/register" style="width: 400px">
+          <div>
+            <label for="tinyURLName">Name</label>
+            <input
+              id="tinyURLName"
+              class="form-control"
+              type="name"
+              name="name"
+              placeholder="name"
+              style="margin: 0 auto 1em; width: 400px"
+            />
+          </div>
           <div>
             <label for="tinyURLEmail">Email address</label>
             <input
@@ -47,7 +58,7 @@
             />
           </div>
           <button type="submit" class="btn btn-outline-primary">
-            Log me in!
+            Register me!
           </button>
         </form>
       </div>

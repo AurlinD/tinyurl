@@ -67,7 +67,7 @@ app.get("/register", (req, res) => {
     longURL: urlDatabase[req.params.shortURL],
     username: req.cookies.username
   };
-  res.render("login", templateVars);
+  res.render("register", templateVars);
 });
 
 app.post("/urls", (req, res) => {
@@ -96,7 +96,11 @@ app.post("/login", (req, res) => {
 
 app.post("/register", (req, res) => {
   let userID = generateRandomString();
-  if (req.body.email === "" || req.body.password === "") {
+  if (
+    req.body.email === "" ||
+    req.body.password === "" ||
+    req.body.name === ""
+  ) {
     res.status(400);
     res.send(
       `${res.statusCode} Please make sure you enter a email and password`
@@ -109,6 +113,7 @@ app.post("/register", (req, res) => {
   } else {
     users[userID] = {
       id: userID,
+      name: req.body.name,
       email: req.body.email,
       password: req.body.password
     };
