@@ -3,7 +3,11 @@ const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const { checkUserEmail, generateRandomString } = require("./helper");
+const {
+  checkUserEmail,
+  generateRandomString,
+  checkUserPassword
+} = require("./helper");
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,12 +42,12 @@ app.get("/", (req, res) => {
 // });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase, username: req.cookies.username };
+  let templateVars = { urls: urlDatabase, username: req.cookies.userId };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { username: req.cookies.username };
+  let templateVars = { username: req.cookies.userId };
   res.render("urls_new", templateVars);
 });
 
@@ -56,7 +60,7 @@ app.get("/urls/:shortURL", (req, res) => {
   let templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
-    username: req.cookies.username
+    username: req.cookies.userId
   };
   res.render("urls_show", templateVars);
 });
@@ -65,9 +69,18 @@ app.get("/register", (req, res) => {
   let templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
-    username: req.cookies.username
+    username: req.cookies.userId
   };
   res.render("register", templateVars);
+});
+
+app.get("/login", (req, res) => {
+  let templateVars = {
+    shortURL: req.params.shortURL,
+    longURL: urlDatabase[req.params.shortURL],
+    username: req.cookies.userId
+  };
+  res.render("login", templateVars);
 });
 
 app.post("/urls", (req, res) => {
@@ -90,8 +103,25 @@ app.post("/urls/:shortURL/update", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  res.cookie("username", req.body.username);
-  res.redirect("/urls");
+  if (req.body.email === "" || req.body.password === "") {
+    res.status(400);
+    res.send(`${res.statusCode} Please enter a valid email or password`);
+  } else if (!checkUserEmail(users, req.body.email)) {
+    res.status(403);
+    res.send(`${res.statusCode} Cannot find email address`);
+  } else if (!checkUserPassword(users, req.body.password)) {
+    res.status(403);
+    res.send(`${res.statusCode} Password does not match`);
+  } else {
+    for (const userRandom in users) {
+      let email = users[userRandom].email;
+      if (email === req.body.email) {
+        userId = users[userRandom].id;
+      }
+    }
+    res.cookie("userId", userId);
+    res.redirect("/urls");
+  }
 });
 
 app.post("/register", (req, res) => {
@@ -118,8 +148,6 @@ app.post("/register", (req, res) => {
       password: req.body.password
     };
     console.log(users);
-
-    res.cookie("user_id", userID);
     res.redirect("/urls");
   }
 });

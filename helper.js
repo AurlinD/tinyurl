@@ -16,4 +16,14 @@ const checkUserEmail = (database, formEmail) => {
   return false;
 };
 
-module.exports = { generateRandomString, checkUserEmail };
+const checkUserPassword = (usersDatabase, formPassword) => {
+  for (const userId in usersDatabase) {
+    let password = usersDatabase[userId].password;
+    if (formPassword === password) {
+      return true;
+    }
+  }
+  return false;
+};
+
+module.exports = { generateRandomString, checkUserEmail, checkUserPassword };
