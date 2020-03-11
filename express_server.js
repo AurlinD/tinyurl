@@ -95,6 +95,8 @@ app.post("/urls/:shortURL/update", (req, res) => {
   res.redirect("/urls");
 });
 
+// checks if any empty string for any of the inputs, compares email and password
+// to database to see if there is a match
 app.post("/login", (req, res) => {
   if (req.body.email === "" || req.body.password === "") {
     res.status(400);
@@ -117,6 +119,7 @@ app.post("/login", (req, res) => {
   }
 });
 
+// checks if any of the inputs are empty strings, checks if email already exists in DB.
 app.post("/register", (req, res) => {
   let userID = generateRandomString();
   if (
